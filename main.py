@@ -1,23 +1,20 @@
-
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 import os
 
-print("🚀 Crypto AI Bot запущен!")
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-token = os.getenv("TELEGRAM_BOT_TOKEN")
-api_key = os.getenv("BYBIT_API_KEY")
-api_secret = os.getenv("BYBIT_API_SECRET")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🤖 Бот запущен и работает!")
 
-if token:
-    print("✅ Telegram Token найден")
-else:
-    print("❌ Telegram Token не найден")
+async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🏓 Pong!")
 
-if api_key:
-    print("✅ Bybit API Key найден")
-else:
-    print("❌ Bybit API Key не найден")
+app = Application.builder().token(TOKEN).build()
 
-if api_secret:
-    print("✅ Bybit Secret Key найден")
-else:
-    print("❌ Bybit Secret Key не найден")
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("ping", ping))
+
+print("Бот запущен...")
+
+app.run_polling()
